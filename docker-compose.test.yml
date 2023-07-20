@@ -1,0 +1,51 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres:15.2
+    container_name: passkey_authenticator_poc_db
+    environment:
+      - POSTGRES_DB=passkey_authenticator_poc_test
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432"
+
+  redis:
+    image: redis:6.2.7
+    container_name: passkey_authenticator_poc_redis
+    ports:
+      - "6379"
+
+  test:
+    build:
+      context: .
+      cache_from:
+        - ${DOCKER_REGISTRY_HOST}/${DOCKER_IMAGE}:${BRANCH_TAG}-test
+      args:
+        - BUILD_ENV=test
+        - RUBY_ENV=test
+        - NODE_ENV=test
+    image: ${DOCKER_REGISTRY_HOST}/${DOCKER_IMAGE}:${BRANCH_TAG}-test
+    container_name: passkey_authenticator_poc_test
+    command: bin/test.sh
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+    volumes:
+      - "ruby-bundle:/bundle"
+      - "${PWD}/tmp/screenshots:/passkey_authenticator_poc/tmp/screenshots"
+      - "${PWD}/coverage:/passkey_authenticator_poc/coverage"
+      - "${PWD}/log:/passkey_authenticator_poc/log"
+    environment:
+      - RACK_ENV=test
+      - RAILS_ENV=test
+      - NODE_ENV=test
+      - DB_HOST=db
+      - CI=$CI
+      - TEST_RETRY=$TEST_RETRY
+      - PORT=$PORT
+      - DANGER_GITHUB_API_TOKEN=$DANGER_GITHUB_API_TOKEN
+
+volumes:
+  ruby-bundle:

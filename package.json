@@ -1,0 +1,17 @@
+{
+  "name": "passkey_authenticator_poc",
+  "private": "true",
+  "dependencies": {
+    "autoprefixer": "10.4.14",
+    "esbuild": "0.18.14",
+    "i18n-js": "3.8.0",
+    "postcss": "8.4.26",
+    "postcss-cli": "10.1.0",
+    "sass": "1.64.0"
+  },
+  "devDependencies": {
+    "@nimblehq/eslint-config-nimble": "2.2.1",
+    "@nimblehq/stylelint-config-nimble": "1.0.3",
+    "stylelint": "15.10.2"
+  }
+}
