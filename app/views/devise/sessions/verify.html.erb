@@ -1,0 +1,7 @@
+<div>
+    <%= form_with scope: :session, local: false, url: create_session_passkey_path, id: "new-session", data: { controller: "new-session", action: "ajax:success->new-session#create ajax:error->new-session#error" } do |form| %>
+        <div>
+            <%= form.submit "Verify with Credential (2FA)" %>
+        </div>
+    <% end %>
+</div>
