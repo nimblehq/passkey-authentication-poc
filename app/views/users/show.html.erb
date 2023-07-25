@@ -1,0 +1,32 @@
+<h1>User Information</h1>
+<p><strong>Email:</strong> <%= @user.email %></p>
+<p><strong>Encrypted Password:</strong> <%= @user.encrypted_password %></p>
+<p><strong>Credentials:</strong>
+
+<table>
+  <tbody>
+    <% @user.credentials.each do |credential| %>
+      <tr>
+        <td><%= credential.label %></td>
+          <td>
+              <%= button_to destroy_credential_path(credential), method: :delete, data: { confirm: 'Are you sure?' } do %>
+                  Delete
+              <% end %>
+          </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</br>
+
+<div>
+    <%= form_with scope: :credential,
+        url: add_credential_path,
+        local: false,
+        data: { controller: "add-credential", action: "ajax:success->add-credential#create" } do |form| %>
+        <div>
+            <%= form.submit "Add Credential" %>
+            <%= form.text_field :label, placeholder: "Label", required: true %>
+        </div>
+    <% end %>
+</div>
