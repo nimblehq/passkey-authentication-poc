@@ -1,0 +1,31 @@
+<%= form_with(
+      scope: :passkey,
+      url: users_passkeys_url,
+      method: :post,
+      id: :"add-passkey-form",
+      data: {
+        "challenge_url": new_create_challenge_users_passkeys_url,
+        "credential_field_name": "passkey[credential]"
+      }
+) do |f| %>
+  <h2>Add a passkey</h2>
+
+  <fieldset id='new-passkey-fields'>
+    <table>
+      <tr>
+        <th><%= f.label :label %></th>
+        <td><%= f.text_field :label, autofocus: "off", required: true %>
+      </tr>
+    </table>
+    <%= f.hidden_field :credential %>
+
+    <button type="submit"> Add passkey</button>
+  </fieldset>
+<% end %>
+
+
+<script type="module">
+  import {submitFormEvent} from 'registration_form'
+
+  document.querySelector('#add-passkey-form').addEventListener('submit', submitFormEvent)
+</script>

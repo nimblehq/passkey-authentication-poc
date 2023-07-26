@@ -20,12 +20,16 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Windows doe
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'devise-passkeys'
 
 # Assets
 gem 'sprockets-rails' # The original asset pipeline for Rails
 gem 'cssbundling-rails' # Bundle and process CSS
 gem 'jsbundling-rails' # Bundle and transpile JavaScript
 # gem 'image_processing' # Use Active Storage variants
+
+# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem "importmap-rails"
 
 # Translations
 # gem 'devise-i18n' # Translations for Devise

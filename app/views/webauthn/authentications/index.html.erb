@@ -1,0 +1,29 @@
+<!-- app/views/webauthn/authentications/index.html.erb -->
+
+<% content_for(:title, 'WebAuthn Authentication') %>
+
+<p class="mb-4 text-center">Hey <%= user.email %>, your account is secured with WebAuthn authenticator.</p>
+
+<%= form_with(
+  model: user,
+  as: 'user',
+  url: webauthn_authentications_path, 
+  method: :post,
+  data: {
+    "challenge_url": new_user_session_challenge_url,
+    "credential_field_name": "user[passkey_credential]"
+  }
+) do |f| %>
+  <%= f.hidden_field :passkey_credential %>
+
+  <section>
+    <button type="submit"> Go </button>
+  </section>
+<% end %>
+
+<script type="module">
+  import {startConditionalMediation, submitFormEvent} from 'session_form'
+
+  startConditionalMediation(document.querySelector('form'))
+  document.querySelector('form').addEventListener('submit', submitFormEvent)
+</script>

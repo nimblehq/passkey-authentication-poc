@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_21_022928) do
+ActiveRecord::Schema.define(version: 2023_07_25_201630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "passkeys", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "label"
+    t.string "external_id"
+    t.string "public_key"
+    t.integer "sign_count"
+    t.datetime "last_used_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["external_id"], name: "index_passkeys_on_external_id"
+    t.index ["public_key"], name: "index_passkeys_on_public_key"
+    t.index ["user_id"], name: "index_passkeys_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -23,8 +37,11 @@ ActiveRecord::Schema.define(version: 2023_07_21_022928) do
     t.datetime "remember_created_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "webauthn_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["webauthn_id"], name: "index_users_on_webauthn_id", unique: true
   end
 
+  add_foreign_key "passkeys", "users"
 end
