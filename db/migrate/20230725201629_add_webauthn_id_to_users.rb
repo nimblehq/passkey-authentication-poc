@@ -1,7 +1,7 @@
 class AddWebauthnIdToUsers < ActiveRecord::Migration[7.0]
   def change
     change_table(:users) do |t|
-      t.string :webauthn_id, null: false
+      t.string :webauthn_id, null: true
 
       t.index :webauthn_id, unique: true
     end

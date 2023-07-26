@@ -18,6 +18,10 @@
         <td><%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %></td>
       </tr>
       <tr>
+        <th><%= f.label :password %></th>
+        <td><%= f.password_field :password, autocomplete: 'new-password' %></td>
+      </tr>
+      <tr>
         <th><%= f.label :passkey_label %></th>
         <td><%= f.text_field :passkey_label, autofocus: "off", required: true %>
       </tr>

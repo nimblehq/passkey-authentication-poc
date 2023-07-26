@@ -1,5 +1,6 @@
 <h2>Log in</h2>
 
+<h3>Passkey</h3>
 <%= form_with(
       model: resource,
       as: resource_name,
@@ -16,6 +17,38 @@
       <tr>
         <th><%= f.label :email %></th>
         <td><%= f.email_field :email, autofocus: true, autocomplete: "username webauthn", required: true %></td>
+      </tr>
+      <tr>
+        <th><%= f.check_box :remember_me %></th>
+        <td><%= f.label :remember_me %></td>
+      </tr>
+    </table>
+  </fieldset>
+
+  <%= f.hidden_field :passkey_credential %>
+
+  <section>
+    <button type="submit"> Sign in</button>
+  </section>
+<% end %>
+
+<h3>Password</h3>
+<%= form_with(
+      model: resource,
+      as: resource_name,
+      url: user_session_path
+) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <fieldset>
+    <table>
+      <tr>
+        <th><%= f.label :email %></th>
+        <td><%= f.email_field :email, autofocus: true, autocomplete: "username", required: true %></td>
+      </tr>
+      <tr>
+        <th><%= f.label :password %></th>
+        <td><%= f.password_field :password, autofocus: true, autocomplete: "current-password", required: true %></td>
       </tr>
       <tr>
         <th><%= f.check_box :remember_me %></th>

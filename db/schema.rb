@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2023_07_25_201630) do
     t.datetime "remember_created_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "webauthn_id", null: false
+    t.string "webauthn_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["webauthn_id"], name: "index_users_on_webauthn_id", unique: true
