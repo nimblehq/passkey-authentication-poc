@@ -281,6 +281,13 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
+  config.warden do |manager|
+    manager.strategies.add(:password_passkey_authenticatable, Devise::Strategies::PasswordPasskeyAuthenticatable)
+    # manager.default_strategies(scope: :user).unshift(:password_passkey_authenticatable)
+  end
+
+  # Devise.add_module :password_passkey_authenticatable, controller: :sessions, route: :session, strategy: :password_passkey_authenticatable
+
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

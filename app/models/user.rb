@@ -1,10 +1,15 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :passkey_authenticatable, :password_passkey_authenticatable,
+         :database_authenticatable, 
+         :registerable, :recoverable, :rememberable, :validatable
          
   has_many :passkeys, dependent: :destroy
+
+  attr_accessor :password
 
   def self.passkeys_class
     Passkey
@@ -19,6 +24,12 @@ class User < ApplicationRecord
 end
 
 Devise.add_module :passkey_authenticatable,
+                  model: 'devise/passkeys/model',
+                  route: {session: [nil, :new, :create, :destroy] },
+                  controller: 'controller/sessions',
+                  strategy: true,
+                  no_input: true
+Devise.add_module :password_passkey_authenticatable,
                   model: 'devise/passkeys/model',
                   route: {session: [nil, :new, :create, :destroy] },
                   controller: 'controller/sessions',
