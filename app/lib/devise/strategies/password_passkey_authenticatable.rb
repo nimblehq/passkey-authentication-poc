@@ -12,16 +12,16 @@ module Devise
 
 
         Rails.logger.debug '========'
-        Rails.logger.debug resource
+        Rails.logger.debug resource.inspect
         Rails.logger.debug validate(resource)
         Rails.logger.debug resource.valid_password?(password)
-        # if validate(resource){ hashed = true; resource.valid_password?(password) }
+        if validate(resource){ hashed = true; resource.valid_password?(password) }
 
           Rails.logger.debug '===<>====='
           remember_me(resource)
           resource.after_database_authentication
           success!(resource)
-        # end
+        end
         Rails.logger.debug '===xxxx====='
 
         # In paranoid mode, hash the password even when a resource doesn't exist for the given authentication key.
