@@ -6,7 +6,7 @@ class User < ApplicationRecord
   # this will do in order left to right
   devise :database_authenticatable,
          :passkey_authenticatable, 
-         :registerable, :recoverable, :rememberable, :validatable,
+         :registerable, :recoverable, :rememberable, :validatable
         #  :password_passkey_authenticatable
          
   has_many :passkeys, dependent: :destroy
