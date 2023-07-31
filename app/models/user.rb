@@ -7,7 +7,6 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :passkey_authenticatable, 
          :registerable, :recoverable, :rememberable, :validatable
-        #  :password_passkey_authenticatable
          
   has_many :passkeys, dependent: :destroy
 
@@ -29,9 +28,3 @@ Devise.add_module :passkey_authenticatable,
                   controller: 'controller/sessions',
                   strategy: true,
                   no_input: true
-# Devise.add_module :password_passkey_authenticatable,
-#                   model: 'devise/passkeys/model',
-#                   route: {session: [nil, :new, :create, :destroy] },
-#                   controller: 'controller/sessions',
-#                   strategy: true,
-#                   no_input: true
