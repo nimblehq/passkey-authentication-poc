@@ -33,7 +33,7 @@ class RegistrationsController < Devise::RegistrationsController
   private
 
   def registration_params
-    params.require(:registration).permit(:email, :password, :label)
+    params.require(:registration).permit(:email, :label)
   end
 
   def create_webauthn_options(user)
