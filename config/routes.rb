@@ -20,4 +20,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'home#show'
+
+  get get '.well-known/apple-app-site-association' => 'apple_well_known#apple_app_site_association'
+  post 'api/registrations/challenge', to: 'api/registrations#challenge', as: :registration_challenge
 end
