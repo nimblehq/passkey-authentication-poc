@@ -4,7 +4,7 @@ class SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    email = session[:email] || session_params[:email]
+    email = session_params[:email]
     user = User.find_by(email: email)
 
     if user
