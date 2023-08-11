@@ -3,15 +3,15 @@ version: '3.2'
 services:
   db:
     image: postgres:15.2
-    container_name: passkey_authenticator_poc_db
+    container_name: passkey_poc_db
     environment:
-      - POSTGRES_DB=passkey_authenticator_poc_production
+      - POSTGRES_DB=passkey_poc_production
     ports:
       - "5432:5432"
 
   redis:
     image: redis:6.2.7
-    container_name: passkey_authenticator_poc_redis
+    container_name: passkey_poc_redis
     ports:
       - "6379:6379"
 
@@ -26,7 +26,7 @@ services:
         - NODE_ENV=production
         - ASSET_HOST
     image: ${DOCKER_REGISTRY_HOST}/${DOCKER_IMAGE}:${BRANCH_TAG}
-    container_name: passkey_authenticator_poc_web
+    container_name: passkey_poc_web
     command: bin/start.sh
     ports:
       - "${PORT}:${PORT}"
@@ -40,7 +40,7 @@ services:
       - RACK_ENV=production
       - RAILS_ENV=production
       - NODE_ENV=production
-      - DATABASE_URL=postgres://postgres@db/passkey_authenticator_poc_production
+      - DATABASE_URL=postgres://postgres@db/passkey_poc_production
       - ASSET_HOST
       - DEFAULT_HOST
       - MAILER_SENDER

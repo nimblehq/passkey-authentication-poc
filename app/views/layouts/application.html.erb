@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang='<%= I18n.locale %>'>
   <head>
-    <title>PasskeyAuthenticatorPoc</title>
+    <title>PasskeyPoc</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  </head>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</head>
 
   <body>
     <%= yield %>

@@ -41,9 +41,9 @@ jobs:
         run: |
           if [[ $BRANCH_TAG = "latest" ]]
           then
-            echo "HEROKU_APP=passkey_authenticator_poc" >> $GITHUB_ENV
+            echo "HEROKU_APP=passkey_poc" >> $GITHUB_ENV
           else
-            echo "HEROKU_APP=passkey_authenticator_poc-staging" >> $GITHUB_ENV
+            echo "HEROKU_APP=passkey_poc-staging" >> $GITHUB_ENV
           fi
 
       - name: Login to Docker registry

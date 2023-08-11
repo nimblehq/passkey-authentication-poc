@@ -1,8 +1,8 @@
-FROM ruby:3.0.1-slim
+FROM ruby:3.2.2-slim
 
 ARG BUILD_ENV=development
 ARG RUBY_ENV=development
-ARG APP_HOME=/passkey_authenticator_poc
+ARG APP_HOME=/passkey_poc
 ARG NODE_ENV=development
 ARG ASSET_HOST=http://localhost
 
@@ -33,7 +33,8 @@ RUN apt-get update -qq && \
 ADD https://dl.yarnpkg.com/debian/pubkey.gpg /tmp/yarn-pubkey.gpg
 RUN apt-key add /tmp/yarn-pubkey.gpg && rm /tmp/yarn-pubkey.gpg && \
     echo "deb http://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
-    curl -sL https://deb.nodesource.com/setup_"$NODE_SOURCE_VERSION".x | bash - && \
+    echo 'Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 600' > /etc/apt/preferences.d/nodesource && \
+    curl -fsSL https://deb.nodesource.com/setup_"$NODE_SOURCE_VERSION".x | bash - && \
     apt-get update -qq && \
     apt-get install -y --no-install-recommends nodejs yarn && \
     apt-get clean && \

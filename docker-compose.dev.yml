@@ -3,15 +3,15 @@ version: '3.2'
 services:
   db:
     image: postgres:15.2
-    container_name: passkey_authenticator_poc_db
+    container_name: passkey_poc_db
     environment:
-      - POSTGRES_DB=passkey_authenticator_poc_development
+      - POSTGRES_DB=passkey_poc_development
       - POSTGRES_PASSWORD=postgres
     ports:
       - "5432:5432"
 
   redis:
     image: redis:6.2.7
-    container_name: passkey_authenticator_poc_redis
+    container_name: passkey_poc_redis
     ports:
       - "6379:6379"

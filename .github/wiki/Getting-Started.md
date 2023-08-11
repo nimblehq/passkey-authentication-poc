@@ -1,7 +1,7 @@
 ### Prerequisites
 
-- Ruby version: 3.0.1
-- Node version: 16.13.2
+- Ruby version: 3.2.2
+- Node version: 16.20.1
 
 ### Docker
 
