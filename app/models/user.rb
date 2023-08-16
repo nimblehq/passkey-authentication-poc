@@ -9,4 +9,9 @@ class User < ApplicationRecord
   after_initialize do
     self.webauthn_id ||= WebAuthn.generate_user_id
   end
+  
+  # Devise requires passwords by default, so disable it
+  def password_required?
+    false
+  end
 end

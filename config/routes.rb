@@ -21,6 +21,11 @@ Rails.application.routes.draw do
 
   root to: 'home#show'
 
-  get get '.well-known/apple-app-site-association' => 'apple_well_known#apple_app_site_association'
-  post 'api/registrations/challenge', to: 'api/registrations#challenge', as: :registration_challenge
+  get '.well-known/apple-app-site-association' => 'apple_well_known#apple_app_site_association'
+  post 'api/registrations/challenge', to: 'api/registrations#challenge', as: :api_registration_challenge
+  post 'api/registrations', to: 'api/password_registrations#create', as: :api_registration
+  post 'api/registrations/callback', to: 'api/registrations#callback', as: :api_registration_callback
+  post 'api/sign-in/challenge', to: 'api/sign_in#challenge', as: :api_sign_in_challenge_challenge
+  post 'api/sign-in', to: 'api/sign_in#create', as: :api_sign_in_challenge
+  post 'api/sign-in/callback', to: 'api/sign_in#callback', as: :api_sign_in_callback_challenge
 end
