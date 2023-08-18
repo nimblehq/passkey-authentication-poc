@@ -15,6 +15,10 @@ class UsersController < ApplicationController
 
     session[:current_challenge] = create_options.challenge
 
+    Rails.logger.info create_options.inspect
+    Rails.logger.info create_options.challenge
+    Rails.logger.info '===this'
+
     render json: create_options
   end
 
@@ -49,6 +53,13 @@ class UsersController < ApplicationController
   end
 
   def valid_webauthn_credential?(webauthn_credential)
+    Rails.logger.info webauthn_credential.response.client_data.inspect
+    Rails.logger.info session[:current_challenge]
+    Rails.logger.info webauthn_credential.response.client_data.challenge
+    Rails.logger.info '===find'
+    Rails.logger.warn OpenSSL.secure_compare(webauthn_credential.response.client_data.challenge, session[:current_challenge])
+    Rails.logger.warn OpenSSL.secure_compare(webauthn_credential.response.client_data.challenge, webauthn_credential.response.client_data.challenge)
+
     webauthn_credential.verify(session[:current_challenge])
     true
   rescue WebAuthn::Error => e

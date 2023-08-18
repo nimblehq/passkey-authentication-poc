@@ -8,9 +8,7 @@ module Api
       user = User.find_by(email: params[:email])
       create_options = create_webauthn_options(user)
   
-      if user.valid?
-        session[:current_registration] = { challenge: create_options.challenge, user_attributes: user.attributes }
-  
+      if user.valid?  
         render json: create_options
       else
         render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
@@ -18,10 +16,11 @@ module Api
     end
   
     def callback
+      user = User.find_by(email: params[:email])
       webauthn_credential = WebAuthn::Credential.from_create(params)
-      credential = create_webauthn_credential_for_user(webauthn_credential)
+      credential = create_webauthn_credential_for_user(webauthn_credential, user)
   
-      if valid_webauthn_credential?(webauthn_credential) && credential.save
+      if valid_webauthn_credential?(webauthn_credential, user) && credential.save
         render json: { status: :ok }, status: :ok
       else
         render json: { status: :unprocessable_entity }, status: :unprocessable_entity
@@ -38,13 +37,21 @@ module Api
     private
   
     def create_webauthn_options(user)
-      WebAuthn::Credential.options_for_create(
-        user: { name: user.email, id: user.webauthn_id }
+      options = WebAuthn::Credential.options_for_create(
+        user: { name: user.email, id: user.webauthn_id },
+        exclude: user.credentials.pluck(:external_id)
       )
+      user.update(current_challenge: options.challenge)
+      Rails.logger.warn options.challenge
+      Rails.logger.info user.current_challenge
+
+      options
     end
 
-    def create_webauthn_credential_for_user(webauthn_credential)
-      current_user.credentials.build(
+    def create_webauthn_credential_for_user(webauthn_credential, user)
+      Rails.logger.warn user
+      Rails.logger.info webauthn_credential
+      user.credentials.build(
         external_id: webauthn_credential.id,
         label: params[:credential_label],
         public_key: webauthn_credential.public_key,
@@ -52,8 +59,8 @@ module Api
       )
     end
   
-    def valid_webauthn_credential?(webauthn_credential)
-      webauthn_credential.verify(session[:current_challenge])
+    def valid_webauthn_credential?(webauthn_credential, user)
+      webauthn_credential.verify(user.current_challenge)
       true
     rescue WebAuthn::Error => e
       Rails.logger.error(e.message)

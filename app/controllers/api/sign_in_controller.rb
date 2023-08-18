@@ -6,7 +6,7 @@ module Api
     def create
       user = User.find_by(email: session_params[:email])
   
-      if user && user&.valid_password?(session_params[:password])
+      if user&.valid_password?(session_params[:password])
         if user.credentials.present?
           handle_2fa_path(user)
         else
@@ -24,8 +24,8 @@ module Api
       if user
         get_options = get_webauthn_options(user)
   
-        session[:current_authentication] = { challenge: get_options.challenge, email: email }
-  
+        user.update(current_challenge: get_options.challenge)
+
         render json: get_options
       else
         render json: { errors: ["User doesn't exist"] }, status: :unprocessable_entity
@@ -37,7 +37,7 @@ module Api
       user = User.find_by(email: session_params['email'])
       credential = user.credentials.find_by(external_id: webauthn_credential.id)
   
-      if valid_webauthn_credential?(webauthn_credential, credential)
+      if valid_webauthn_credential?(webauthn_credential, credential, user)
         credential.update!(sign_count: webauthn_credential.sign_count)
         sign_in(user)
         render json: { status: :ok }, status: :ok
@@ -60,18 +60,17 @@ module Api
       )
     end
 
-    def valid_webauthn_credential?(webauthn_credential, credential)
-      verify_webauthn_credential(webauthn_credential, credential)
+    def valid_webauthn_credential?(webauthn_credential, credential, user)
+      verify_webauthn_credential(webauthn_credential, credential, user)
       true
     rescue WebAuthn::Error => e
       Rails.logger.error(e.message)
-      session.delete('current_authentication')
       false
     end
 
-    def verify_webauthn_credential(webauthn_credential, credential)
+    def verify_webauthn_credential(webauthn_credential, credential, user)
       webauthn_credential.verify(
-        session_params['challenge'],
+        user.current_challenge,
         public_key: credential.public_key,
         sign_count: credential.sign_count
       )
