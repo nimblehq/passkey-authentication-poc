@@ -19,7 +19,8 @@ class UsersController < ApplicationController
   end
 
   def callback
-    webauthn_credential = WebAuthn::Credential.from_create(params)
+    credential_hash = JSON.parse(params[:credential][:credential])
+    webauthn_credential = WebAuthn::Credential.from_create(credential_hash)
     credential = create_webauthn_credential_for_user(webauthn_credential)
 
     if valid_webauthn_credential?(webauthn_credential) && credential.save
@@ -41,7 +42,7 @@ class UsersController < ApplicationController
   def create_webauthn_credential_for_user(webauthn_credential)
     current_user.credentials.build(
       external_id: webauthn_credential.id,
-      label: params[:credential_label],
+      label: params[:credential][:credential_label],
       public_key: webauthn_credential.public_key,
       sign_count: webauthn_credential.sign_count
     )

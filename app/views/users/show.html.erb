@@ -21,12 +21,64 @@
 
 <div>
     <%= form_with scope: :credential,
-        url: add_credential_path,
+        url: callback_user_path,
+        data: {
+          "challenge_url": add_credential_url
+        },
         local: false,
-        data: { controller: "add-credential", action: "ajax:success->add-credential#create" } do |form| %>
+        id: "add-passkey-form" do |form| %>
         <div>
-            <%= form.submit "Add Credential" %>
-            <%= form.text_field :label, placeholder: "Label", required: true %>
+
+    <%= form.hidden_field :credential %>
+
+    <button type="submit"> Add passkey</button>
+                <%= form.text_field :credential_label, placeholder: "Label", required: true %>
         </div>
     <% end %>
 </div>
+
+
+<script type="module">
+    
+import {
+  create,
+  parseCreationOptionsFromJSON,
+} from "@github/webauthn-json/browser-ponyfill";
+    
+let submitFormEvent = async function(event){
+// 1
+  const csrfToken = document.getElementsByName("csrf-token")[0].content;
+  event.preventDefault()
+  event.stopImmediatePropagation()
+
+// 2
+  let form = event.currentTarget
+  let data = new FormData(form)
+  data.delete('_method')
+  let credentialFieldName = form.dataset.credentialFieldName
+
+// 3
+  let newChallengeURL = new URL(form.dataset.challengeUrl)
+
+  let challengeFetch = fetch(newChallengeURL, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "X-CSRF-Token": csrfToken,
+    },
+    body: data,
+  })
+
+  const challengeJSON = await(await challengeFetch).json()
+// 4
+  const credentialCreationOptions = parseCreationOptionsFromJSON({publicKey: challengeJSON})
+
+  const credentialCreationResponse = await create(credentialCreationOptions)
+console.log(form.elements)
+  form.elements['credential[credential]'].value = JSON.stringify(credentialCreationResponse)
+// 5
+  form.submit()
+}
+
+  document.querySelector('#add-passkey-form').addEventListener('submit', submitFormEvent)
+</script>
