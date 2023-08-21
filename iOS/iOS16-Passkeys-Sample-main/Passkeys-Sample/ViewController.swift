@@ -13,7 +13,7 @@ class ViewController: UIViewController, ASAuthorizationControllerPresentationCon
     @IBOutlet var passwordTextField: UITextField?
 
     @IBAction func onButtonTapped(_ sender: UIButton) {
-        performSignIn(userName: (textField?.text) ?? "", password: (textField?.text) ?? "")
+        performSignIn(userName: (textField?.text) ?? "", password: (passwordTextField?.text) ?? "")
     }
 
     let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: Constant.providerId)
