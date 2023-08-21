@@ -24,7 +24,7 @@ class ViewController: UIViewController, ASAuthorizationControllerPresentationCon
     }
 
     private func performSignIn(userName: String, password: String) {
-        var urlRequst = URLRequest(url: URL(string: "http://localhost:3000/api/sign-in")!)
+        var urlRequst = URLRequest(url: URL(string: "https://rails-passkey-mobile-demo-90f7328f33ff.herokuapp.com/api/sign-in")!)
         urlRequst.httpMethod = "POST"
         urlRequst.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
@@ -117,10 +117,8 @@ extension ViewController : ASAuthorizationControllerDelegate {
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationPlatformPublicKeyCredentialRegistration {
-            showAlert(with: "Authorized with Passkeys", message: "Create account with credential ID = \(credential.credentialID)")
             // Take steps to handle the registration.
         } else if let credential = authorization.credential as? ASAuthorizationPlatformPublicKeyCredentialAssertion {
-            showAlert(with: "Authorized with Passkeys", message: "Sign in with credential ID = \(credential.credentialID)")
 
             let signature = credential.signature
             let userId = credential.userID
@@ -135,6 +133,7 @@ extension ViewController : ASAuthorizationControllerDelegate {
                 let httpBody = try JSONSerialization.data(withJSONObject: [
                     "session": [
                         "email": (textField?.text ?? ""),
+                        "password": (passwordTextField?.text ?? "")
                     ],
                     "id": credential.credentialID.base64EncodedString().base64ToBase64url(),
                     "rawId": credential.credentialID.base64EncodedString().base64ToBase64url(),
@@ -157,9 +156,14 @@ extension ViewController : ASAuthorizationControllerDelegate {
             var task: URLSessionDataTask?
             task = urlSession.dataTask(with: urlRequst) { data, response, error in
                 do {
+                    let token = try JSONDecoder().decode(TokenAPIModel.self, from: data!)
                     print(String(data: data!, encoding: .utf8))
+                    print(token)
+                    currentToken = token.access_token
+
+                    guard let data else { return print(error?.localizedDescription) }
+
                     DispatchQueue.main.async {
-//                        self.showAlert(with: "Done", message: "Done")
                         self.performSegue(withIdentifier: "go", sender: nil)
                     }
                 } catch {

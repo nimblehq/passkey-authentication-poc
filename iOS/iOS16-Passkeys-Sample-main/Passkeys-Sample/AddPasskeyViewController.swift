@@ -114,9 +114,16 @@ extension AddPasskeyViewController : ASAuthorizationControllerDelegate {
             var task: URLSessionDataTask?
             task = urlSession.dataTask(with: urlRequst) { data, response, error in
                 do {
+                    let result = try JSONDecoder().decode(PasskeyResultAPIModel.self, from: data!)
                     print(String(data: data!, encoding: .utf8))
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "go2", sender: nil)
+                    if result.success {
+                        DispatchQueue.main.async {
+                            self.dismiss(animated: true)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.showAlert(with: "Error", message: "See log.")
+                        }
                     }
                 } catch {
                     print(String(data: data!, encoding: .utf8))
@@ -141,23 +148,3 @@ extension AddPasskeyViewController : ASAuthorizationControllerDelegate {
         showAlert(with: "Error", message: error.localizedDescription)
     }
 }
-
-extension String {
-    func base64ToBase64url() -> String {
-        self
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
-    }
-
-    func base64urlToBase64() -> String {
-        var base64 = self
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-        if base64.count % 4 != 0 {
-            base64.append(String(repeating: "=", count: 4 - base64.count % 4))
-        }
-        return base64
-    }
-}
-

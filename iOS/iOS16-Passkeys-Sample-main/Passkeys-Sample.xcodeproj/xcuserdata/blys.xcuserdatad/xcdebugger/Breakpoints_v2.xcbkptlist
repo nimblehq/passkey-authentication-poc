@@ -148,53 +148,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "27859DEF-0F67-455B-B89C-0B359CC290E3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Passkeys-Sample/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
-            landmarkName = "authorizationController(controller:didCompleteWithAuthorization:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "27859DEF-0F67-455B-B89C-0B359CC290E3 - 4ebc9439cbfad5d4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Passkeys_Sample.ViewController.authorizationController(controller: __C.ASAuthorizationController, didCompleteWithAuthorization: __C.ASAuthorization) -&gt; ()"
-                  moduleName = "Passkeys-Sample"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blys/Downloads/iOS16-Passkeys-Sample-main/Passkeys-Sample/ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "153"
-                  endingLineNumber = "153"
-                  offsetFromSymbolStart = "25">
-               </Location>
-               <Location
-                  uuid = "27859DEF-0F67-455B-B89C-0B359CC290E3 - e7ad80da6820d6c7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Passkeys_Sample.ViewController.authorizationController(controller: __C.ASAuthorizationController, didCompleteWithAuthorization: __C.ASAuthorization) -&gt; ()"
-                  moduleName = "Passkeys-Sample"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blys/Downloads/iOS16-Passkeys-Sample-main/Passkeys-Sample/ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "153"
-                  endingLineNumber = "153"
-                  offsetFromSymbolStart = "298">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
