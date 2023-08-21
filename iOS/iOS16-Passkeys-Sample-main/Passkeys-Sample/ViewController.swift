@@ -24,7 +24,7 @@ class ViewController: UIViewController, ASAuthorizationControllerPresentationCon
     }
 
     private func performSignIn(userName: String, password: String) {
-        var urlRequst = URLRequest(url: URL(string: "https://rails-passkey-mobile-demo-90f7328f33ff.herokuapp.com/api/sign-in")!)
+        var urlRequst = URLRequest(url: URL(string: "http://localhost:3000/api/sign-in")!)
         urlRequst.httpMethod = "POST"
         urlRequst.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
@@ -40,20 +40,27 @@ class ViewController: UIViewController, ASAuthorizationControllerPresentationCon
         task = urlSession.dataTask(with: urlRequst) { data, response, error in
 
             do {
+                let token = try JSONDecoder().decode(TokenAPIModel.self, from: data!)
                 print(String(data: data!, encoding: .utf8))
+                print(token)
+                currentToken = token.access_token
 
                 guard let data else { return print(error?.localizedDescription) }
-                print(String(data: data, encoding: .utf8))
-                self.performPasskeySignIn(userName: userName)
+
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "go", sender: nil)
+                }
             } catch {
                 print(String(data: data!, encoding: .utf8))
                 print(error.localizedDescription)
+
+                self.performPasskeySignIn(userName: userName, password: password)
             }
         }
         task?.resume()
     }
 
-    private func performPasskeySignIn(userName: String) {
+    private func performPasskeySignIn(userName: String, password: String) {
         // Fetch the challenge from the server. The challenge needs to be unique for each request.
         // The userID is the identifier for the user's account.
 
@@ -62,7 +69,7 @@ class ViewController: UIViewController, ASAuthorizationControllerPresentationCon
         urlRequst.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         do {
-            let httpBody = try JSONSerialization.data(withJSONObject: ["session": ["email": userName]], options: [])
+            let httpBody = try JSONSerialization.data(withJSONObject: ["session": ["email": userName, "password": password]], options: [])
             urlRequst.httpBody = httpBody
         } catch let error {
             print(error)
@@ -73,7 +80,7 @@ class ViewController: UIViewController, ASAuthorizationControllerPresentationCon
         task = urlSession.dataTask(with: urlRequst) { data, response, error in
             do {
                 print(String(data: data!, encoding: .utf8))
-                let challengeJson = try JSONDecoder().decode(Challenge.self, from: data!)
+                let challengeJson = try JSONDecoder().decode(SignInChallengeAPIModel.self, from: data!)
                 let challengeString = challengeJson.challenge
 
                 let challengeData = Data(referencing: NSData(base64Encoded: challengeString.base64urlToBase64()) ?? NSData())
@@ -152,8 +159,8 @@ extension ViewController : ASAuthorizationControllerDelegate {
                 do {
                     print(String(data: data!, encoding: .utf8))
                     DispatchQueue.main.async {
-                        self.showAlert(with: "Done", message: "Done")
-//                        self.performSegue(withIdentifier: "go2", sender: nil)
+//                        self.showAlert(with: "Done", message: "Done")
+                        self.performSegue(withIdentifier: "go", sender: nil)
                     }
                 } catch {
                     print(String(data: data!, encoding: .utf8))
@@ -171,20 +178,4 @@ extension ViewController : ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         showAlert(with: "Error", message: error.localizedDescription)
     }
-}
-
-struct RegisterChallenge: Decodable {
-
-    struct User: Decodable {
-
-        let id: String
-    }
-
-    let user: User
-    let challenge: String
-}
-
-struct Challenge: Decodable {
-
-    let challenge: String
 }

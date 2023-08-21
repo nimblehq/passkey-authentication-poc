@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		091EE4A62A935A600025C473 /* SignInChallengeAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091EE4A52A935A600025C473 /* SignInChallengeAPIModel.swift */; };
+		091EE4A82A935A6A0025C473 /* TokenAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091EE4A72A935A6A0025C473 /* TokenAPIModel.swift */; };
+		091EE4AA2A935A830025C473 /* RegisterChallengeAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091EE4A92A935A830025C473 /* RegisterChallengeAPIModel.swift */; };
 		09E273D72A8CB646003A123A /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E273D62A8CB646003A123A /* RegisterViewController.swift */; };
 		09E273D92A8CC0F1003A123A /* AddPasskeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E273D82A8CC0F0003A123A /* AddPasskeyViewController.swift */; };
 		3AE5A54E28562F1100C1F47A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE5A54D28562F1100C1F47A /* AppDelegate.swift */; };
@@ -38,6 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		091EE4A52A935A600025C473 /* SignInChallengeAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInChallengeAPIModel.swift; sourceTree = "<group>"; };
+		091EE4A72A935A6A0025C473 /* TokenAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenAPIModel.swift; sourceTree = "<group>"; };
+		091EE4A92A935A830025C473 /* RegisterChallengeAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterChallengeAPIModel.swift; sourceTree = "<group>"; };
 		09E273D62A8CB646003A123A /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		09E273D82A8CC0F0003A123A /* AddPasskeyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPasskeyViewController.swift; sourceTree = "<group>"; };
 		3A1A27D9285634560079224C /* Passkeys-Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Passkeys-Sample.entitlements"; sourceTree = "<group>"; };
@@ -81,6 +87,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		091EE4A42A935A500025C473 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				091EE4A52A935A600025C473 /* SignInChallengeAPIModel.swift */,
+				091EE4A92A935A830025C473 /* RegisterChallengeAPIModel.swift */,
+				091EE4A72A935A6A0025C473 /* TokenAPIModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		3AE5A54128562F1100C1F47A = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +126,7 @@
 				3AE5A55128562F1100C1F47A /* ViewController.swift */,
 				09E273D82A8CC0F0003A123A /* AddPasskeyViewController.swift */,
 				09E273D62A8CB646003A123A /* RegisterViewController.swift */,
+				091EE4A42A935A500025C473 /* Models */,
 				3AE5A55328562F1100C1F47A /* Main.storyboard */,
 				3AE5A55628562F1200C1F47A /* Assets.xcassets */,
 				3AE5A55828562F1200C1F47A /* LaunchScreen.storyboard */,
@@ -267,9 +284,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				09E273D72A8CB646003A123A /* RegisterViewController.swift in Sources */,
+				091EE4A82A935A6A0025C473 /* TokenAPIModel.swift in Sources */,
 				3AE5A55228562F1100C1F47A /* ViewController.swift in Sources */,
 				3AE5A54E28562F1100C1F47A /* AppDelegate.swift in Sources */,
 				09E273D92A8CC0F1003A123A /* AddPasskeyViewController.swift in Sources */,
+				091EE4AA2A935A830025C473 /* RegisterChallengeAPIModel.swift in Sources */,
+				091EE4A62A935A600025C473 /* SignInChallengeAPIModel.swift in Sources */,
 				3AE5A55028562F1100C1F47A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

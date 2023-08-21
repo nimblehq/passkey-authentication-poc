@@ -44,7 +44,7 @@ module Api
         credential.update!(sign_count: webauthn_credential.sign_count)
         sign_in(user)
 
-        render_success
+        render_success user
       else
         render json: { status: :unprocessable_entity }, status: :unprocessable_entity
       end
@@ -59,8 +59,6 @@ module Api
     private
 
     def render_success(user)
-      Rails.logger.info user
-      Rails.logger.info "========"
       access_token = Doorkeeper::AccessToken.create(
         resource_owner_id: user.id,
         use_refresh_token: true,

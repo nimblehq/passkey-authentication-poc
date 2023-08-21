@@ -9,34 +9,26 @@ import UIKit
 import AuthenticationServices
 
 class AddPasskeyViewController: UIViewController, ASAuthorizationControllerPresentationContextProviding {
-    @IBOutlet var textField: UITextField?
     @IBOutlet var labelTextField: UITextField?
 
     @IBAction func onButtonTapped(_ sender: UIButton) {
-        performAddPasskey(userName: (textField?.text) ?? "", label: (labelTextField?.text) ?? "")
+        performAddPasskey(label: (labelTextField?.text) ?? "")
     }
 
     let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: Constant.providerId)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        textField?.text = "hello@me.com"
     }
 
-    func performAddPasskey(userName: String, label: String) {
+    func performAddPasskey(label: String) {
         // Fetch the challenge from the server. The challenge needs to be unique for each request.
         // The userID is the identifier for the user's account.
 
         var urlRequst = URLRequest(url: URL(string: "https://rails-passkey-mobile-demo-90f7328f33ff.herokuapp.com/api/registrations/challenge")!)
         urlRequst.httpMethod = "POST"
         urlRequst.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        do {
-            let httpBody = try JSONSerialization.data(withJSONObject: ["email": userName], options: [])
-            urlRequst.httpBody = httpBody
-        } catch let error {
-            print(error)
-        }
+        urlRequst.setValue( "Bearer \(currentToken ?? "")", forHTTPHeaderField: "Authorization")
 
         let urlSession = URLSession(configuration: .default)
         var task: URLSessionDataTask?
@@ -44,7 +36,7 @@ class AddPasskeyViewController: UIViewController, ASAuthorizationControllerPrese
 
             do {
                 print(String(data: data!, encoding: .utf8))
-                let challengeJson = try JSONDecoder().decode(RegisterChallenge.self, from: data!)
+                let challengeJson = try JSONDecoder().decode(RegisterChallengeAPIModel.self, from: data!)
                 let challengeString = challengeJson.challenge
                 let userIdString = challengeJson.user.id
 
@@ -52,7 +44,7 @@ class AddPasskeyViewController: UIViewController, ASAuthorizationControllerPrese
                 let userID = Data(referencing: NSData(base64Encoded: userIdString.base64urlToBase64()) ?? NSData())
 
                 let registrationRequest = self.platformProvider.createCredentialRegistrationRequest(challenge: challengeData,
-                                                                                                    name: userName, userID: userID)
+                                                                                                    name: challengeJson.user.name, userID: userID)
 
                 // Use only ASAuthorizationPlatformPublicKeyCredentialRegistrationRequests or
                 // ASAuthorizationSecurityKeyPublicKeyCredentialRegistrationRequests here.
@@ -97,10 +89,10 @@ extension AddPasskeyViewController : ASAuthorizationControllerDelegate {
             var urlRequst = URLRequest(url: URL(string: "https://rails-passkey-mobile-demo-90f7328f33ff.herokuapp.com/api/registrations/callback")!)
             urlRequst.httpMethod = "POST"
             urlRequst.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequst.setValue( "Bearer \(currentToken ?? "")", forHTTPHeaderField: "Authorization")
 
             do {
                 let httpBody = try JSONSerialization.data(withJSONObject: [
-                    "email": (textField?.text ?? ""),
                     "credential_label": (labelTextField?.text ?? ""),
                     "id": credential.credentialID.base64EncodedString().base64ToBase64url(),
                     "rawId": credential.credentialID.base64EncodedString().base64ToBase64url(),
