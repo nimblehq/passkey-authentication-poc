@@ -22,6 +22,7 @@ gem "importmap-rails"
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'doorkeeper' # API token authentication
 
 # Assets
 gem 'sprockets-rails' # The original asset pipeline for Rails

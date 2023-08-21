@@ -34,13 +34,17 @@ module Api
   
     def callback
       webauthn_credential = WebAuthn::Credential.from_get(params)
-      user = User.find_by(email: session_params['email'])
+      user = User.find_by(email: session_params[:email])
+  
+      return render json: { status: :unprocessable_entity }, status: :unprocessable_entity unless user&.valid_password?(session_params[:password])
+
       credential = user.credentials.find_by(external_id: webauthn_credential.id)
   
       if valid_webauthn_credential?(webauthn_credential, credential, user)
         credential.update!(sign_count: webauthn_credential.sign_count)
         sign_in(user)
-        render json: { status: :ok }, status: :ok
+
+        render_success
       else
         render json: { status: :unprocessable_entity }, status: :unprocessable_entity
       end
@@ -53,7 +57,20 @@ module Api
     end
   
     private
-  
+
+    def render_success(user)
+      Rails.logger.info user
+      Rails.logger.info "========"
+      access_token = Doorkeeper::AccessToken.create(
+        resource_owner_id: user.id,
+        use_refresh_token: true,
+        expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
+        scopes: ''
+      )
+
+      render json: Doorkeeper::OAuth::TokenResponse.new(access_token).body
+    end
+
     def get_webauthn_options(user)
       WebAuthn::Credential.options_for_get(
         allow: user.credentials.pluck(:external_id)
@@ -82,7 +99,8 @@ module Api
 
     def handle_normal_path(user)
       sign_in(user)
-      render json: {}
+
+      render_success user
     end
 
     def session_params

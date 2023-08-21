@@ -3,9 +3,10 @@
 module Api
   class RegistrationsController < ApplicationController
     # skip_before_action :doorkeeper_authorize!
+    before_action :doorkeeper_authorize!
 
     def challenge
-      user = User.find_by(email: params[:email])
+      user = current_user
       create_options = create_webauthn_options(user)
   
       if user.valid?  
@@ -16,7 +17,7 @@ module Api
     end
   
     def callback
-      user = User.find_by(email: params[:email])
+      user = current_user
       webauthn_credential = WebAuthn::Credential.from_create(params)
       credential = create_webauthn_credential_for_user(webauthn_credential, user)
   
@@ -35,7 +36,11 @@ module Api
     end
   
     private
-  
+
+    def current_user
+      @current_user ||= User.find_by(id: doorkeeper_token[:resource_owner_id])
+    end
+
     def create_webauthn_options(user)
       options = WebAuthn::Credential.options_for_create(
         user: { name: user.email, id: user.webauthn_id },
